@@ -1,6 +1,7 @@
 package database
 
 import (
+	"context"
 	"errors"
 	"io/fs"
 
@@ -9,7 +10,7 @@ import (
 	"github.com/golang-migrate/migrate/v4/source/iofs"
 )
 
-type MigrateDriver func() (database.Driver, error)
+type MigrateDriver func(ctx context.Context) (database.Driver, error)
 
 // NewMigrator returns a new unstarted migration engine.
 //
@@ -19,8 +20,8 @@ type MigrateDriver func() (database.Driver, error)
 //	if err := m.Up(); err != nil {
 //	  // handle...
 //	}
-func NewMigrator(fs fs.FS, dr MigrateDriver, path string, execMigrations bool) (*migrate.Migrate, error) {
-	m, err := dr()
+func NewMigrator(ctx context.Context, fs fs.FS, dr MigrateDriver, path string, execMigrations bool) (*migrate.Migrate, error) {
+	m, err := dr(ctx)
 	if err != nil {
 		return nil, err
 	}
