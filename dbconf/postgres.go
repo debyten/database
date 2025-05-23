@@ -21,7 +21,7 @@ type Postgres struct {
 	// DB is the name of the database to connect to.
 	DB string `default:"DEFAULT_DB"`
 	// UpgradePath is the path to the database's upgrade script.
-	UpgradePath string `default:"db"`
+	UpgradePath string `default:"migrations"`
 }
 
 func (m Postgres) DBName() string {
@@ -36,6 +36,10 @@ func (m Postgres) ConnURL() string {
 // GetUpgradePath returns the path to the database's upgrade script.
 func (m Postgres) GetUpgradePath() string {
 	return m.UpgradePath
+}
+
+func (m Postgres) ConnURLWithPrefix() string {
+	return fmt.Sprintf("postgres://%s", m.ConnURL())
 }
 
 // NewPostgres returns a new Postgres struct with configuration information read from the environment variables.

@@ -26,7 +26,7 @@ type Mongo struct {
 	// DirectConnection specifies whether to connect directly to the server or through a mongos proxy.
 	DirectConnection bool `default:"true"`
 	// UpgradePath is the path to the database's upgrade script.
-	UpgradePath string `default:"db"`
+	UpgradePath string `default:"migrations"`
 	// RSName is the replicaSet name.
 	RSName string `default:"rs0"`
 }
@@ -42,6 +42,10 @@ func (dc Mongo) ConnURL() string {
 		return fmt.Sprintf(fullDBConnFmt, dc.User, dc.Password, dc.Host, dc.Port, dc.RSName, dc.DirectConnection)
 	}
 	return fmt.Sprintf(simpleDBConnFmt, dc.Host, dc.Port, dc.RSName, dc.DirectConnection)
+}
+
+func (dc Mongo) ConnURLWithPrefix() string {
+	return fmt.Sprintf("mongodb://%s", dc.ConnURL())
 }
 
 // DBName returns the name of the database.

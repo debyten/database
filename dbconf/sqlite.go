@@ -7,7 +7,7 @@ type SQLite struct {
 	// When providing `:memory:` sqlite will run in memory.
 	Path string `default:"../sqlite.db"`
 	// UpgradePath is the path to the database's upgrade script.
-	UpgradePath string `default:"db"`
+	UpgradePath string `default:"migrations"`
 }
 
 func NewSQLite() Datasource {
@@ -23,6 +23,10 @@ func (SQLite) DBName() string {
 // ConnURL returns the connection URL for the MySQL server.
 func (s SQLite) ConnURL() string {
 	return s.Path
+}
+
+func (s SQLite) ConnURLWithPrefix() string {
+	return s.ConnURL()
 }
 
 // GetUpgradePath returns the path to the database's upgrade script.

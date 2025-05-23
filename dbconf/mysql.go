@@ -21,7 +21,7 @@ type Mysql struct {
 	// DB is the name of the database to connect to.
 	DB string `default:"DEFAULT_DB"`
 	// UpgradePath is the path to the database's upgrade script.
-	UpgradePath string `default:"db"`
+	UpgradePath string `default:"migrations"`
 }
 
 func (m Mysql) DBName() string {
@@ -36,6 +36,10 @@ func (m Mysql) ConnURL() string {
 // GetUpgradePath returns the path to the database's upgrade script.
 func (m Mysql) GetUpgradePath() string {
 	return m.UpgradePath
+}
+
+func (m Mysql) ConnURLWithPrefix() string {
+	return fmt.Sprintf("mysql://%s", m.ConnURL())
 }
 
 // NewMysql returns a new Mysql struct with configuration information read from the environment variables.
