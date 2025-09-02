@@ -1,6 +1,10 @@
 package dbconf
 
-import "github.com/kelseyhightower/envconfig"
+import (
+	"fmt"
+
+	"github.com/kelseyhightower/envconfig"
+)
 
 type SQLite struct {
 	// Path points to the file that holds the sqlite db.
@@ -8,6 +12,10 @@ type SQLite struct {
 	Path string `default:"../sqlite.db"`
 	// UpgradePath is the path to the database's upgrade script.
 	UpgradePath string `default:"migrations"`
+}
+
+func NewSQLiteInMemory(migrationPath string) Datasource {
+	return SQLite{Path: ":memory:", UpgradePath: migrationPath}
 }
 
 func NewSQLite() Datasource {
@@ -26,7 +34,7 @@ func (s SQLite) ConnURL() string {
 }
 
 func (s SQLite) ConnURLWithPrefix() string {
-	return s.ConnURL()
+	return fmt.Sprintf("sqlite://%s", s.ConnURL())
 }
 
 // GetUpgradePath returns the path to the database's upgrade script.
