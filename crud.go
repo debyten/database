@@ -8,6 +8,7 @@ import "context"
 type Crud[T any, ID comparable] interface {
 	// Create inserts a new object of type T into the collection.
 	Create(ctx context.Context, entity ...*T) error
+	CreateMany(ctx context.Context, entities *[]T) error
 	// Save updates an existing object of type T in the collection, replacing its current values with
 	// the values of the provided object.
 	Save(ctx context.Context, entity *T) error
